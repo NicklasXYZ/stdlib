@@ -1,12 +1,12 @@
-//// BitBuilder is a type used for efficiently concatenating bits to create bit
-//// strings.
+//// A module that provides the `BitBuilder` type used for efficiently concatenating
+//// bits to create `BitString`s.
 ////
-//// If we append one bit string to another the bit strings must be copied to a
+//// If we append one `BitString` to another the `BitStrings` must be copied to a
 //// new location in memory so that they can sit together. This behaviour
-//// enables efficient reading of the string but copying can be expensive,
-//// especially if we want to join many bit strings together.
+//// enables efficient reading of the string, but copying can be expensive,
+//// especially if we want to combine many bit strings.
 ////
-//// BitBuilder is different in that it can be joined together in constant
+//// `BitBuilder` is different in that it can be joined together in constant
 //// time using minimal memory, and then can be efficiently converted to a
 //// bit string using the `to_bit_string` function.
 ////
@@ -31,14 +31,14 @@ if javascript {
   }
 }
 
-/// Create an empty `BitBuilder`. Useful as the start of a pipe chaning many
+/// Create an empty `BitBuilder`. Useful as the start of a pipe chaining many
 /// builders together.
 ///
 pub fn new() -> BitBuilder {
   do_concat([])
 }
 
-/// Prepends a bit string to the start of a builder.
+/// Prepends a `BitString` to the start of a `BitBuilder`.
 ///
 /// Runs in constant time.
 ///
@@ -46,7 +46,7 @@ pub fn prepend(to: BitBuilder, prefix: BitString) -> BitBuilder {
   append_builder(from_bit_string(prefix), to)
 }
 
-/// Appends a bit string to the end of a builder.
+/// Appends a `BitString` to the end of a `BitBuilder`.
 ///
 /// Runs in constant time.
 ///
@@ -54,7 +54,7 @@ pub fn append(to: BitBuilder, suffix: BitString) -> BitBuilder {
   append_builder(to, from_bit_string(suffix))
 }
 
-/// Prepends a builder onto the start of another.
+/// Prepends a `BitBuilder` onto the start of another.
 ///
 /// Runs in constant time.
 ///
@@ -62,7 +62,7 @@ pub fn prepend_builder(to: BitBuilder, prefix: BitBuilder) -> BitBuilder {
   append_builder(prefix, to)
 }
 
-/// Appends a builder onto the end of another.
+/// Appends a `BitBuilder` onto the end of another.
 ///
 /// Runs in constant time.
 ///
@@ -90,7 +90,7 @@ if javascript {
   }
 }
 
-/// Prepends a string onto the start of a builder.
+/// Prepends a `String` onto the start of a `BitBuilder`.
 ///
 /// Runs in constant time when running on Erlang.
 /// Runs in linear time with the length of the string otherwise.
@@ -99,7 +99,7 @@ pub fn prepend_string(to: BitBuilder, prefix: String) -> BitBuilder {
   append_builder(from_string(prefix), to)
 }
 
-/// Appends a string onto the end of a builder.
+/// Appends a `String` onto the end of a `BitBuidler`.
 ///
 /// Runs in constant time when running on Erlang.
 /// Runs in linear time with the length of the string otherwise.
@@ -108,7 +108,7 @@ pub fn append_string(to: BitBuilder, suffix: String) -> BitBuilder {
   append_builder(to, from_string(suffix))
 }
 
-/// Joins a list of builders into a single builders.
+/// Joins a list of `BitBuilder`s into a single `BitBuilder`.
 ///
 /// Runs in constant time.
 ///
@@ -127,7 +127,7 @@ if javascript {
   }
 }
 
-/// Creates a new builder from a string.
+/// Creates a new `BitBuilder` from a `String`.
 ///
 /// Runs in constant time when running on Erlang.
 /// Runs in linear time otherwise.
@@ -147,7 +147,7 @@ if javascript {
   }
 }
 
-/// Creates a new builder from a string builder.
+/// Creates a new `BitBuilder` from a `StringBuilder`.
 ///
 /// Runs in constant time when running on Erlang.
 /// Runs in linear time otherwise.
@@ -167,7 +167,7 @@ if javascript {
   }
 }
 
-/// Creates a new builder from a bit string.
+/// Creates a new `BitBuilder` from a `BitString`.
 ///
 /// Runs in constant time.
 ///
@@ -186,7 +186,7 @@ if javascript {
   }
 }
 
-/// Turns an builder into a bit string.
+/// Turns a `BitBuilder` into a `BitString`.
 ///
 /// Runs in linear time.
 ///
@@ -233,7 +233,7 @@ if javascript {
   }
 }
 
-/// Returns the size of the builder's content in bytes.
+/// Returns the size of the `BitBuilders`'s content in bytes.
 ///
 /// Runs in linear time.
 ///
