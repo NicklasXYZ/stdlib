@@ -3,6 +3,14 @@ import gleam/string
 
 /// Encodes a `BitString` into a base 64 encoded `String`.
 ///
+/// ## Examples
+///
+/// ```gleam
+/// > <<0, 0, 0>>
+/// > |> base.encode64(True)
+/// "AAAA"
+/// ```
+///
 pub fn encode64(input: BitString, padding: Bool) -> String {
   let encoded = do_encode64(input)
   case padding {
@@ -22,6 +30,14 @@ if javascript {
 }
 
 /// Decodes a base 64 encoded `String` into a `BitString`.
+///
+/// ## Examples
+///
+/// ```gleam
+/// > "AAAA"
+/// > |> base.decode64()
+/// Ok(<<0, 0, 0>>)
+/// ```
 ///
 pub fn decode64(encoded: String) -> Result(BitString, Nil) {
   let padded = case bit_string.byte_size(bit_string.from_string(encoded)) % 4 {
@@ -43,6 +59,14 @@ if javascript {
 
 /// Encodes a `BitString` into a base 64 encoded `String` with URL and filename safe alphabet.
 ///
+/// ## Examples
+///
+/// ```gleam
+/// > <<0, 0, 0>>
+/// > |> base.url_encode64(True)
+/// "AAAA"
+/// ```
+///
 pub fn url_encode64(input: BitString, padding: Bool) -> String {
   encode64(input, padding)
   |> string.replace("+", "-")
@@ -50,6 +74,14 @@ pub fn url_encode64(input: BitString, padding: Bool) -> String {
 }
 
 /// Decodes a base 64 encoded `String` with URL and filename safe alphabet into a `BitString`.
+///
+/// ## Examples
+///
+/// ```gleam
+/// > "AAAA"
+/// > |> base.url_decode64()
+/// Ok(<<0, 0, 0>>)
+/// ```
 ///
 pub fn url_decode64(encoded: String) -> Result(BitString, Nil) {
   encoded
