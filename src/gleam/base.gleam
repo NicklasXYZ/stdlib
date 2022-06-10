@@ -7,7 +7,7 @@ import gleam/string
 ///
 /// ```gleam
 /// > <<0, 0, 0>>
-/// > |> base.encode64(True)
+/// > |> encode64(True)
 /// "AAAA"
 /// ```
 ///
@@ -35,7 +35,7 @@ if javascript {
 ///
 /// ```gleam
 /// > "AAAA"
-/// > |> base.decode64()
+/// > |> decode64()
 /// Ok(<<0, 0, 0>>)
 /// ```
 ///
@@ -63,7 +63,7 @@ if javascript {
 ///
 /// ```gleam
 /// > <<0, 0, 0>>
-/// > |> base.url_encode64(True)
+/// > |> url_encode64(True)
 /// "AAAA"
 /// ```
 ///
@@ -79,7 +79,7 @@ pub fn url_encode64(input: BitString, padding: Bool) -> String {
 ///
 /// ```gleam
 /// > "AAAA"
-/// > |> base.url_decode64()
+/// > |> url_decode64()
 /// Ok(<<0, 0, 0>>)
 /// ```
 ///
