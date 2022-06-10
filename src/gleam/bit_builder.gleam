@@ -34,6 +34,13 @@ if javascript {
 /// Create an empty `BitBuilder`. Useful as the start of a pipe chaining many
 /// builders together.
 ///
+/// ## Examples
+///
+///```
+/// > new()
+/// > |> to_bit_string
+/// <<>>
+///```
 pub fn new() -> BitBuilder {
   do_concat([])
 }
@@ -41,6 +48,17 @@ pub fn new() -> BitBuilder {
 /// Prepends a `BitString` to the start of a `BitBuilder`.
 ///
 /// Runs in constant time.
+///
+/// ## Examples
+///
+///```gleam
+/// > new()
+/// > |> prepend(<<0>>)
+/// > |> prepend(<<1>>)
+/// > |> prepend(<<2>>)
+/// > |> to_bit_string
+/// <<2, 1, 0>>
+///```
 ///
 pub fn prepend(to: BitBuilder, prefix: BitString) -> BitBuilder {
   append_builder(from_bit_string(prefix), to)
@@ -50,6 +68,17 @@ pub fn prepend(to: BitBuilder, prefix: BitString) -> BitBuilder {
 ///
 /// Runs in constant time.
 ///
+/// ## Examples
+///
+///```gleam
+/// > new()
+/// > |> append(<<0>>)
+/// > |> append(<<1>>)
+/// > |> append(<<2>>)
+/// > |> to_bit_string
+/// <<0, 1, 2>>
+///```
+///
 pub fn append(to: BitBuilder, suffix: BitString) -> BitBuilder {
   append_builder(to, from_bit_string(suffix))
 }
@@ -58,6 +87,16 @@ pub fn append(to: BitBuilder, suffix: BitString) -> BitBuilder {
 ///
 /// Runs in constant time.
 ///
+/// ## Examples
+///
+///```gleam
+/// > let builder = from_bit_string(<<3, 4>>)
+/// > from_bit_string(<<1, 2>>)
+/// > |> prepend_builder(builder)
+/// > |> to_bit_string
+/// <<3, 4, 1, 2>>
+///```
+///
 pub fn prepend_builder(to: BitBuilder, prefix: BitBuilder) -> BitBuilder {
   append_builder(prefix, to)
 }
@@ -65,6 +104,16 @@ pub fn prepend_builder(to: BitBuilder, prefix: BitBuilder) -> BitBuilder {
 /// Appends a `BitBuilder` onto the end of another.
 ///
 /// Runs in constant time.
+///
+/// ## Examples
+///
+///```gleam
+/// > let builder = from_bit_string(<<3, 4>>)
+/// > from_bit_string(<<1, 2>>)
+/// > |> append_builder(builder)
+/// > |> to_bit_string
+/// <<1, 2, 3, 4>>
+///```
 ///
 pub fn append_builder(
   to first: BitBuilder,
@@ -95,6 +144,20 @@ if javascript {
 /// Runs in constant time when running on Erlang.
 /// Runs in linear time with the length of the string otherwise.
 ///
+/// ## Examples
+///
+///```gleam
+/// > from_bit_string(<<1>>)
+/// > |> bit_builder.prepend_string("0")
+/// > |> to_bit_string
+/// <<"0":utf8, 1>>
+///
+/// > from_string("1")
+/// > |> bit_builder.prepend_string("0")
+/// > |> to_bit_string
+/// <<"0":utf8, "1":utf8>>
+///```
+///
 pub fn prepend_string(to: BitBuilder, prefix: String) -> BitBuilder {
   append_builder(from_string(prefix), to)
 }
@@ -104,6 +167,20 @@ pub fn prepend_string(to: BitBuilder, prefix: String) -> BitBuilder {
 /// Runs in constant time when running on Erlang.
 /// Runs in linear time with the length of the string otherwise.
 ///
+/// ## Examples
+///
+///```gleam
+/// > from_bit_string(<<1>>)
+/// > |> bit_builder.append_string("0")
+/// > |> to_bit_string
+/// <<1, "0":utf8>>
+///
+/// > from_string("1")
+/// > |> bit_builder.append_string("0")
+/// > |> to_bit_string
+/// <<"1":utf8, "0":utf8>>
+///```
+///
 pub fn append_string(to: BitBuilder, suffix: String) -> BitBuilder {
   append_builder(to, from_string(suffix))
 }
@@ -111,6 +188,15 @@ pub fn append_string(to: BitBuilder, suffix: String) -> BitBuilder {
 /// Joins a list of `BitBuilder`s into a single `BitBuilder`.
 ///
 /// Runs in constant time.
+///
+/// ## Examples
+///
+///```gleam
+/// > [from_bit_string(<<1>>), from_bit_string(<<3>>)]
+/// > |> bit_builder.concat
+/// > |> bit_builder.to_bit_string
+/// <<1, 2>>
+///```
 ///
 pub fn concat(builders: List(BitBuilder)) -> BitBuilder {
   do_concat(builders)
@@ -131,6 +217,18 @@ if javascript {
 ///
 /// Runs in constant time when running on Erlang.
 /// Runs in linear time otherwise.
+///
+/// ## Examples
+///
+///```gleam
+/// > from_string("")
+/// > |> to_bit_string
+/// <<>>
+///
+/// > from_string("1")
+/// > |> to_bit_string
+/// <<"1":utf8>>
+///```
 ///
 pub fn from_string(string: String) -> BitBuilder {
   do_from_string(string)
@@ -171,6 +269,18 @@ if javascript {
 ///
 /// Runs in constant time.
 ///
+/// ## Examples
+///
+///```gleam
+/// > from_bit_string(<<>>)
+/// > |> to_bit_string
+/// <<>>
+///
+/// > from_bit_string(<<1>>)
+/// > |> to_bit_string
+/// <<1>>
+///```
+///
 pub fn from_bit_string(bits: BitString) -> BitBuilder {
   do_from_bit_string(bits)
 }
@@ -192,6 +302,18 @@ if javascript {
 ///
 /// When running on Erlang this function is implemented natively by the
 /// virtual machine and is highly optimised.
+///
+/// ## Examples
+///
+///```gleam
+/// > from_bit_string(<<1>>)
+/// > |> to_bit_string
+/// <<1>>
+///
+/// > from_string("1")
+/// > |> to_bit_string
+/// <<"1":utf8>>
+///```
 ///
 pub fn to_bit_string(builder: BitBuilder) -> BitString {
   do_to_bit_string(builder)
@@ -236,6 +358,18 @@ if javascript {
 /// Returns the size of the `BitBuilders`'s content in bytes.
 ///
 /// Runs in linear time.
+///
+/// ## Examples
+///
+///```gleam
+/// > new()
+/// > |> byte_size
+/// 0
+///
+/// > from_bit_string(<<1, 2, 3>>)
+/// > |> byte_size
+/// 3
+///```
 ///
 pub fn byte_size(builder: BitBuilder) -> Int {
   do_byte_size(builder)
